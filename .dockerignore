@@ -1,0 +1,9 @@
+server/node_modules
+server/build
+server/db
+
+web/node_modules
+web/build
+
+*.log
+.DS_Store
