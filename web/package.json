@@ -18,7 +18,7 @@
     "fuse.js": "^6.0.4",
     "graphql": "^15.1.0",
     "history": "^4.10.1",
-    "markdown-it": "^11.0.0",
+    "markdown-it": "^12.3.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-draggable": "^4.4.3",
