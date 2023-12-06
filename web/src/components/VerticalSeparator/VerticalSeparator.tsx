@@ -1,13 +1,12 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { DraggableCore, DraggableEventHandler } from "react-draggable";
+import { makeStyles } from '@material-ui/core/styles';
+import { DraggableCore, DraggableEventHandler } from 'react-draggable';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   root: {
-    height: "100%",
+    height: '100%',
     width: 2,
-    backgroundColor: "gray",
-    cursor: "col-resize",
+    backgroundColor: 'gray',
+    cursor: 'col-resize',
   },
 }));
 
@@ -23,6 +22,7 @@ function VerticalSeparator({ onMove }: Props) {
   };
 
   return (
+    // @ts-ignore
     <DraggableCore onDrag={handleDrag}>
       <div>
         <div className={classes.root} />

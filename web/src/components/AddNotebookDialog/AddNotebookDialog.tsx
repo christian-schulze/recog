@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { ChangeEvent, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 interface DraftNotebook {
   name: string;
 }
 
-interface Props {
+interface AddNotebookDialogProps {
   open: boolean;
   onClickCancel: () => void;
   onClickAdd: (notebook: DraftNotebook) => void;
 }
 
-function AddNotebookDialog({ open, onClickCancel, onClickAdd }: Props) {
-  const [notebookName, setNotebookName] = useState("");
+function AddNotebookDialog({
+  open,
+  onClickCancel,
+  onClickAdd,
+}: AddNotebookDialogProps) {
+  const [notebookName, setNotebookName] = useState('');
 
-  const handleChangeNotebookName = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeNotebookName = (event: ChangeEvent<HTMLInputElement>) => {
     setNotebookName(event.target.value);
   };
 
@@ -47,6 +49,7 @@ function AddNotebookDialog({ open, onClickCancel, onClickAdd }: Props) {
           autoFocus
           margin="dense"
           id="name"
+          name="name"
           label="Notebook Name"
           type="text"
           fullWidth

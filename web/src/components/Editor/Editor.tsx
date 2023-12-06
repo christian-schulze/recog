@@ -1,17 +1,18 @@
-import React, { useEffect, useRef, useState, Fragment } from "react";
-import MarkdownIt from "markdown-it";
-import MdEditor from "react-markdown-editor-lite";
-import "react-markdown-editor-lite/lib/index.css";
-import Paper from "@material-ui/core/Paper";
-import Chip from "@material-ui/core/Chip";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import styled from "styled-components";
+import { ChangeEvent, useEffect, useRef, useState, Fragment } from 'react';
+import styled from 'styled-components';
+import MarkdownIt from 'markdown-it';
+import MdEditor from 'react-markdown-editor-lite';
+import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
 
-import { deleteElement } from "utils/array";
-import { Note } from "./EditorContainer";
+import 'react-markdown-editor-lite/lib/index.css';
+
+import { deleteElement } from '@/utils/array';
+import { Note } from './EditorContainer';
 
 const mdParser = new MarkdownIt({ html: true });
 
@@ -36,7 +37,7 @@ const ButtonSpacer = styled.span`
   width: 4px;
 `;
 
-interface Props {
+interface EditorProps {
   note: Note;
   onDeleteTag: (tagToDelete: string) => Promise<boolean>;
   onAddTag: (newTag: string) => Promise<boolean>;
@@ -50,15 +51,15 @@ function Editor({
   onAddTag,
   onSaveNote,
   onReloadNote,
-}: Props) {
-  const [title, setTitle] = useState("");
+}: EditorProps) {
+  const [title, setTitle] = useState('');
   useEffect(() => {
-    setTitle(note.title || "");
+    setTitle(note.title || '');
   }, [note]);
 
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState('');
   useEffect(() => {
-    setBody(note.body || "");
+    setBody(note.body || '');
   }, [note]);
 
   const newTagRef = useRef<HTMLInputElement | null>(null);
@@ -67,12 +68,12 @@ function Editor({
     setTags(note.tags || []);
   }, [note]);
 
-  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
   const handleChangeEditor = ({
-    html,
+    html: _,
     text,
   }: {
     html: string;
@@ -85,8 +86,8 @@ function Editor({
     onSaveNote(title, body);
   };
 
-  const [newTag, setNewTag] = useState("");
-  const handleChangeNewTag = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [newTag, setNewTag] = useState('');
+  const handleChangeNewTag = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTag(event.target.value);
   };
 
@@ -95,13 +96,13 @@ function Editor({
     if (result) {
       setTags([...tags, newTag]);
       if (newTagRef && newTagRef.current) {
-        newTagRef.current.value = "";
+        newTagRef.current.value = '';
       }
     }
   };
 
-  const handleDeleteTag = (tagToDelete: string) => {
-    const result = onDeleteTag(tagToDelete);
+  const handleDeleteTag = async (tagToDelete: string) => {
+    const result = await onDeleteTag(tagToDelete);
     if (result) {
       const t = deleteElement(tags, tagToDelete);
       setTags(t);
@@ -150,9 +151,9 @@ function Editor({
       </StyledHeader>
       <MdEditor
         value={body}
-        style={{ height: "calc(100% - 118px)" }}
-        renderHTML={(mardownText) => {
-          return mdParser.render(mardownText);
+        style={{ height: 'calc(100% - 118px)' }}
+        renderHTML={(markdownText) => {
+          return mdParser.render(markdownText);
         }}
         onChange={handleChangeEditor}
       />

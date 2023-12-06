@@ -1,8 +1,6 @@
-import React from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { useAuth0 } from "react-auth0-spa";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { NotebooksPanel } from "./NotebooksPanel";
 
@@ -52,7 +50,7 @@ function NotebooksPanelContainer() {
   const { user } = useAuth0();
 
   const { data, refetch } = useQuery(GET_NOTEBOOKS_QUERY, {
-    variables: { userId: user.sub },
+    variables: { userId: user?.sub },
   });
   const notebooks = data?.getNotebooks || [];
 
@@ -61,7 +59,7 @@ function NotebooksPanelContainer() {
   const [saveNotebook] = useMutation(SAVE_NOTEBOOK_MUTATION);
 
   const handleAddNotebook = async (notebook: DraftNotebook) => {
-    await addNotebook({ variables: { name: notebook.name, userId: user.sub } });
+    await addNotebook({ variables: { name: notebook.name, userId: user?.sub } });
     await refetch();
   };
 
@@ -80,7 +78,7 @@ function NotebooksPanelContainer() {
   if (notebooks) {
     return (
       <NotebooksPanel
-        notebookId={notebookId}
+        notebookId={notebookId!}
         notebooks={notebooks}
         addNotebook={handleAddNotebook}
         deleteNotebook={handleDeleteNotebook}

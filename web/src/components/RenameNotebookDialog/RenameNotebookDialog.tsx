@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { ChangeEvent, useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -12,7 +11,7 @@ interface DraftNotebook {
   name: string;
 }
 
-interface Props {
+interface RenameNotebookDialogProps {
   openNotebookId: string | null;
   onClickCancel: () => void;
   onClickSave: (notebook: DraftNotebook) => void;
@@ -22,11 +21,11 @@ const RenameNotebookDialog = ({
   openNotebookId,
   onClickCancel,
   onClickSave,
-}: Props) => {
+}: RenameNotebookDialogProps) => {
   const [notebookName, setNotebookName] = useState("");
 
   const handleChangeNotebookName = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>
   ) => {
     setNotebookName(event.target.value);
   };
@@ -72,12 +71,6 @@ const RenameNotebookDialog = ({
       </DialogActions>
     </Dialog>
   );
-};
-
-RenameNotebookDialog.propTypes = {
-  openNotebookId: PropTypes.string,
-  onClickCancel: PropTypes.func,
-  onClickSave: PropTypes.func,
 };
 
 export { RenameNotebookDialog };

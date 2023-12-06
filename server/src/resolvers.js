@@ -1,4 +1,4 @@
-import { db } from "./dbSqlite";
+import { db } from './dbSqlite';
 
 const resolvers = {
   Query: {
@@ -17,8 +17,7 @@ const resolvers = {
   },
   Mutation: {
     addNotebook: async (_parent, { name, userId }, _context, _info) => {
-      const notebook = await db.addNotebook(name, userId);
-      return notebook;
+      return await db.addNotebook(name, userId);
     },
     saveNotebook: async (_parent, { notebookId, name }, _context, _info) => {
       await db.saveNotebook(notebookId, name);
@@ -34,8 +33,7 @@ const resolvers = {
       _context,
       _info
     ) => {
-      const note = await db.addNote(title, body, tags, notebookId);
-      return note;
+      return await db.addNote(title, body, tags, notebookId);
     },
     saveNote: async (_parent, { noteId, title, body }, _context, _info) => {
       await db.saveNote(noteId, title, body);

@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
-import styled from "styled-components";
-import MarkdownIt from "markdown-it";
-import Chip from "@material-ui/core/Chip";
-import Paper from "@material-ui/core/Paper";
+import { Fragment } from 'react';
+import styled from 'styled-components';
+import MarkdownIt from 'markdown-it';
+import Chip from '@material-ui/core/Chip';
+import Paper from '@material-ui/core/Paper';
 
 const mdParser = new MarkdownIt({ html: true });
 
@@ -30,11 +30,11 @@ interface Note {
   tags: string[];
 }
 
-interface Props {
+interface NoteProps {
   note: Note;
 }
 
-function Note({ note }: Props) {
+function Note({ note }: NoteProps) {
   return (
     <>
       <StyledHeader>

@@ -1,43 +1,47 @@
-import path from "path";
-import Sequelize from "sequelize";
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { INTEGER, Sequelize, STRING } from 'sequelize';
+
+const _dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: path.join(__dirname, "/db/notes.sqlite"),
+  dialect: 'sqlite',
+  storage: path.join(_dirname, '/db/notes.sqlite')
 });
 
-const Notebook = sequelize.define("notebook", {
-  name: { type: Sequelize.STRING, allowNull: false },
-  userId: { type: Sequelize.STRING, allowNull: false },
+const Notebook = sequelize.define('notebook', {
+  name: { type: STRING, allowNull: false },
+  userId: { type: STRING, allowNull: false }
 });
 
-const Note = sequelize.define("note", {
-  title: { type: Sequelize.STRING, allowNull: false },
-  body: { type: Sequelize.STRING, allowNull: false },
+const Note = sequelize.define('note', {
+  title: { type: STRING, allowNull: false },
+  body: { type: STRING, allowNull: false }
 });
 
-const Tag = sequelize.define("tag", {
-  name: { type: Sequelize.STRING, allowNull: false },
+const Tag = sequelize.define('tag', {
+  name: { type: STRING, allowNull: false }
 });
 
 const NotesTags = sequelize.define(
-  "notes_tags",
+  'notes_tags',
   {
-    noteId: { type: Sequelize.INTEGER },
-    tagId: { type: Sequelize.INTEGER },
+    noteId: { type: INTEGER },
+    tagId: { type: INTEGER }
   },
   {
-    freezeTableName: true,
+    freezeTableName: true
   }
 );
 
 Notebook.hasMany(Note);
 Notebook.hasMany(Tag);
 Note.belongsToMany(Tag, {
-  through: { model: NotesTags, foreignKey: "tagId" },
+  through: { model: NotesTags, foreignKey: 'tagId' }
 });
 Tag.belongsToMany(Note, {
-  through: { model: NotesTags, foreignKey: "noteId" },
+  through: { model: NotesTags, foreignKey: 'noteId' }
 });
 
 Notebook.sync();
@@ -48,7 +52,7 @@ NotesTags.sync();
 export const db = {
   async getAllNotes() {
     const notes = await Note.findAll({
-      include: [{ model: Tag }],
+      include: [{ model: Tag }]
     });
 
     return notes.map((note) => {
@@ -57,7 +61,7 @@ export const db = {
         title: note.title,
         body: note.body,
         tags: note.tags.map((tag) => tag.name),
-        notebookId: note.notebookId,
+        notebookId: note.notebookId
       };
     });
   },
@@ -65,9 +69,9 @@ export const db = {
   async getNotesForNotebook(notebookId) {
     const notes = await Note.findAll({
       where: {
-        notebookId,
+        notebookId
       },
-      include: [{ model: Tag }],
+      include: [{ model: Tag }]
     });
 
     return notes.map((note) => {
@@ -76,14 +80,14 @@ export const db = {
         title: note.title,
         body: note.body,
         tags: note.tags.map((tag) => tag.name),
-        notebookId: note.notebookId,
+        notebookId: note.notebookId
       };
     });
   },
 
   async getNote(noteId) {
     const note = await Note.findByPk(noteId, {
-      include: [{ model: Tag }],
+      include: [{ model: Tag }]
     });
 
     return {
@@ -91,24 +95,22 @@ export const db = {
       title: note.title,
       body: note.body,
       tags: note.tags.map((tag) => tag.name),
-      notebookId: note.notebookId,
+      notebookId: note.notebookId
     };
   },
 
   async addNote(title, body, tagNames, notebookId) {
-    const note = await Note.create(
+    return await Note.create(
       {
         title,
         body,
         tags: tagNames.map((name) => ({ name, notebookId })),
-        notebookId,
+        notebookId
       },
       {
-        include: [Tag],
+        include: [Tag]
       }
     );
-
-    return note;
   },
 
   async saveNote(noteId, title, body) {
@@ -127,21 +129,15 @@ export const db = {
   },
 
   async getNotebook(notebookId) {
-    const notebook = await Notebook.findByPk(notebookId);
-
-    return notebook;
+    return await Notebook.findByPk(notebookId);
   },
 
   async getAllNotebooks(userId) {
-    const notebooks = await Notebook.findAll({ where: { userId } });
-
-    return notebooks;
+    return await Notebook.findAll({ where: { userId } });
   },
 
   async addNotebook(name, userId) {
-    const notebook = await Notebook.create({ name, userId });
-
-    return notebook;
+    return await Notebook.create({ name, userId });
   },
 
   async saveNotebook(notebookId, name) {
@@ -174,10 +170,10 @@ export const db = {
 
     // destroy tag if not assigned to any notes
     const notesTags = await NotesTags.findAll({
-      where: { tagId: tag.id },
+      where: { tagId: tag.id }
     });
     if (notesTags.length === 0) {
       tag.destroy();
     }
-  },
+  }
 };

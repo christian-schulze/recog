@@ -1,31 +1,32 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { ChangeEvent, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 interface DraftNote {
   title: string;
   notebookId: string;
 }
 
-interface Props {
+interface AddNoteDialogProps {
   open: boolean;
   onClickCancel: () => void;
   onClickAdd: (note: DraftNote) => void;
   notebookId: string;
 }
 
-function AddNoteDialog({ open, onClickCancel, onClickAdd, notebookId }: Props) {
-  const [noteTitle, setNoteTitle] = useState("");
+function AddNoteDialog({
+  open,
+  onClickCancel,
+  onClickAdd,
+  notebookId,
+}: AddNoteDialogProps) {
+  const [noteTitle, setNoteTitle] = useState('');
 
-  const handleChangeNoteTitle = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeNoteTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setNoteTitle(event.target.value);
   };
 
@@ -45,7 +46,6 @@ function AddNoteDialog({ open, onClickCancel, onClickAdd, notebookId }: Props) {
     >
       <DialogTitle id="add-note-dialog-title">Add Note</DialogTitle>
       <DialogContent>
-        <DialogContentText></DialogContentText>
         <TextField
           autoFocus
           margin="dense"
@@ -67,12 +67,5 @@ function AddNoteDialog({ open, onClickCancel, onClickAdd, notebookId }: Props) {
     </Dialog>
   );
 }
-
-AddNoteDialog.propTypes = {
-  open: PropTypes.bool,
-  onClickCancel: PropTypes.func,
-  onClickAdd: PropTypes.func,
-  notebookId: PropTypes.string,
-};
 
 export { AddNoteDialog };

@@ -1,28 +1,28 @@
-import React, { useRef, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import AddIcon from "@material-ui/icons/Add";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import { MouseEvent, useRef, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import AddIcon from '@material-ui/icons/Add';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-import { QueryStringLink } from "components/QueryStringLink";
-import { AddNotebookDialog } from "components/AddNotebookDialog";
-import { RenameNotebookDialog } from "components/RenameNotebookDialog";
-import { DraftNotebook, Notebook } from "./NotebooksPanelContainer";
+import { QueryStringLink } from '@/components/QueryStringLink';
+import { AddNotebookDialog } from '@/components/AddNotebookDialog';
+import { RenameNotebookDialog } from '@/components/RenameNotebookDialog';
+import { DraftNotebook, Notebook } from './NotebooksPanelContainer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
   subHeader: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   subHeaderLeftItem: {
     flexGrow: 1,
@@ -62,7 +62,7 @@ function NotebooksPanel({
   };
 
   const handleClickAddNotebook = async (notebook: DraftNotebook) => {
-    await addNotebook(notebook);
+    addNotebook(notebook);
     setAddNotebookDialogOpen(false);
   };
 
@@ -71,13 +71,13 @@ function NotebooksPanel({
   };
 
   const handleClickSaveRenameNotebook = async (notebook: Notebook) => {
-    await saveNotebook(notebook);
+    saveNotebook(notebook);
     setRenameNotebookDialogOpen(null);
   };
 
   const handleClickNotebookMenu = (
-    event: React.MouseEvent<HTMLElement>,
-    notebookId: string
+    event: MouseEvent<HTMLElement>,
+    notebookId: string,
   ) => {
     event.preventDefault();
     menuRef.current = event.target as HTMLElement;

@@ -1,15 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-
-import { useAuth0 } from "react-auth0-spa";
+import { ChangeEvent } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,12 +37,12 @@ function AppToolbar({ editorEnabled, setEditorEnabled }: Props) {
   };
 
   const handleChangeEditorEnabledSwitch = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const checked = !!event.target.checked;
+    const checked = event.target.checked;
     window.localStorage.setItem(
-      `${user.sub}:editorEnabled`,
-      checked.toString()
+      `${user?.sub}:editorEnabled`,
+      checked.toString(),
     );
     setEditorEnabled(checked);
   };

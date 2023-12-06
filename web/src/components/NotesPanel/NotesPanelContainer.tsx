@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { useMutation, useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
-import Fuse from "fuse.js";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import Fuse from 'fuse.js';
 
-import { shouldRefetchNotebookState } from "state/atoms";
-import { NotesPanel } from "./NotesPanel";
+import { notebook, setShouldReFetch } from '@/state/notebook.ts';
+import { NotesPanel } from './NotesPanel';
 
 const GET_NOTEBOOK_QUERY = gql`
   query GetNotebook($notebookId: ID!) {
@@ -64,25 +62,22 @@ function NotesPanelContainer() {
     setNotes(data?.getNotebook?.notes || []);
   }, [data]);
 
-  const [shouldRefetchNotebook, setShouldRefetchNotebook] = useRecoilState(
-    shouldRefetchNotebookState
-  );
   useEffect(() => {
-    if (shouldRefetchNotebook) {
+    if (notebook.shouldReFetch) {
       refetch();
-      setShouldRefetchNotebook(false);
+      setShouldReFetch(false);
     }
-  }, [refetch, setShouldRefetchNotebook, shouldRefetchNotebook]);
+  }, [refetch, setShouldReFetch, notebook.shouldReFetch]);
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const handleChangeSearchText = (text: string) => {
     setSearchText(text);
   };
 
   const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   useEffect(() => {
-    if (notes.length > 0 && searchText !== "") {
-      const options = { keys: ["title", "tags"], distance: 0 };
+    if (notes.length > 0 && searchText !== '') {
+      const options = { keys: ['title', 'tags'], distance: 0 };
       const fuse = new Fuse(notes, options);
       const rawResults = fuse.search(searchText);
       const results = rawResults.map((i) => i.item);
@@ -113,8 +108,8 @@ function NotesPanelContainer() {
   if (filteredNotes) {
     return (
       <NotesPanel
-        notebookId={notebookId}
-        noteId={noteId}
+        notebookId={notebookId!}
+        noteId={noteId!}
         notes={filteredNotes}
         addNote={handleAddNote}
         deleteNote={handleDeleteNote}

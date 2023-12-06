@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { gql, useQuery, useMutation } from '@apollo/client';
 
-import { shouldRefetchNotebookState } from "state/atoms";
-import { Editor } from "./Editor";
+import { setShouldReFetch } from '@/state/notebook.ts';
+import { Editor } from './Editor';
 
 const NOTE_QUERY = gql`
   query GetNote($noteId: ID!) {
@@ -46,15 +44,11 @@ export interface Note {
 function EditorContainer() {
   const { notebookId, noteId } = useParams();
 
-  const setShouldRefetchNotebook = useSetRecoilState(
-    shouldRefetchNotebookState
-  );
-
   const { loading, error, data, refetch } = useQuery(NOTE_QUERY, {
     variables: {
       noteId,
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
 
   const [addTag] = useMutation(ADD_TAG_MUTATION);
@@ -82,7 +76,7 @@ function EditorContainer() {
 
   const handleSaveNote = async (title: string, body: string) => {
     await saveNote({ variables: { noteId, title, body } });
-    setShouldRefetchNotebook(true);
+    setShouldReFetch(true);
   };
 
   const handleReloadNote = async () => {
