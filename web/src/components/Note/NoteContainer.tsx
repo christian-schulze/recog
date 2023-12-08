@@ -10,7 +10,10 @@ const NOTE_QUERY = gql`
       id
       title
       body
-      tags
+      tags {
+        id
+        name
+      }
     }
   }
 `;

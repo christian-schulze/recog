@@ -11,14 +11,19 @@ const NOTE_QUERY = gql`
       id
       title
       body
-      tags
+      tags {
+        name
+      }
     }
   }
 `;
 
 const ADD_TAG_MUTATION = gql`
   mutation AddTag($notebookId: ID!, $noteId: ID!, $name: String!) {
-    addTag(notebookId: $notebookId, noteId: $noteId, name: $name)
+    addTag(notebookId: $notebookId, noteId: $noteId, name: $name) {
+      noteId
+      tagId
+    }
   }
 `;
 
@@ -34,11 +39,16 @@ const SAVE_NOTE_MUTATION = gql`
   }
 `;
 
+export interface Tag {
+  id: number;
+  name: string;
+}
+
 export interface Note {
   id: string;
   title: string;
   body: string;
-  tags: string[];
+  tags: Tag[];
 }
 
 function EditorContainer() {

@@ -53,19 +53,16 @@ function Editor({
   onReloadNote,
 }: EditorProps) {
   const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+
+  const [newTag, setNewTag] = useState('');
+  const newTagRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     setTitle(note.title || '');
-  }, [note]);
-
-  const [body, setBody] = useState('');
-  useEffect(() => {
     setBody(note.body || '');
-  }, [note]);
-
-  const newTagRef = useRef<HTMLInputElement | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
-  useEffect(() => {
-    setTags(note.tags || []);
+    setTags(note.tags.map((tag) => tag.name) || []);
   }, [note]);
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +83,6 @@ function Editor({
     onSaveNote(title, body);
   };
 
-  const [newTag, setNewTag] = useState('');
   const handleChangeNewTag = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTag(event.target.value);
   };
@@ -95,9 +91,7 @@ function Editor({
     const result = await onAddTag(newTag);
     if (result) {
       setTags([...tags, newTag]);
-      if (newTagRef && newTagRef.current) {
-        newTagRef.current.value = '';
-      }
+      setNewTag('');
     }
   };
 
@@ -140,9 +134,10 @@ function Editor({
             ))}
           </span>
           <Input
-            ref={newTagRef}
-            placeholder="new tag"
             onChange={handleChangeNewTag}
+            placeholder="new tag"
+            ref={newTagRef}
+            value={newTag}
           />
           <IconButton size="small" onClick={handleClickAddTag}>
             <AddIcon />

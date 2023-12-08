@@ -15,7 +15,9 @@ const GET_NOTEBOOK_QUERY = gql`
         id
         title
         body
-        tags
+        tags {
+          name
+        }
       }
     }
   }
@@ -23,7 +25,7 @@ const GET_NOTEBOOK_QUERY = gql`
 
 const ADD_NOTE_MUTATION = gql`
   mutation AddNote($title: String!, $notebookId: ID!) {
-    addNote(title: $title, body: "", tags: [], notebookId: $notebookId) {
+    addNote(title: $title, body: "", tagNames: [], notebookId: $notebookId) {
       id
       title
       body
@@ -46,18 +48,25 @@ export interface Note {
   id: string;
   title: string;
   body: string;
-  tags: string[];
+  tags: { name: string }[];
 }
 
 function NotesPanelContainer() {
   const { notebookId, noteId } = useParams();
 
+  const [searchText, setSearchText] = useState('');
+  const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
+
   const { data, refetch } = useQuery(GET_NOTEBOOK_QUERY, {
     variables: {
       notebookId,
     },
   });
+
+  const [addNote] = useMutation(ADD_NOTE_MUTATION);
+  const [deleteNote] = useMutation(DELETE_NOTE_MUTATION);
+
   useEffect(() => {
     setNotes(data?.getNotebook?.notes || []);
   }, [data]);
@@ -69,12 +78,10 @@ function NotesPanelContainer() {
     }
   }, [refetch, setShouldReFetch, notebook.shouldReFetch]);
 
-  const [searchText, setSearchText] = useState('');
   const handleChangeSearchText = (text: string) => {
     setSearchText(text);
   };
 
-  const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   useEffect(() => {
     if (notes.length > 0 && searchText !== '') {
       const options = { keys: ['title', 'tags'], distance: 0 };
@@ -86,9 +93,6 @@ function NotesPanelContainer() {
       setFilteredNotes(notes);
     }
   }, [notes, searchText]);
-
-  const [addNote] = useMutation(ADD_NOTE_MUTATION);
-  const [deleteNote] = useMutation(DELETE_NOTE_MUTATION);
 
   const handleAddNote = async (note: DraftNote) => {
     await addNote({

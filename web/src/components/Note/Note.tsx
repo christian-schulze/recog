@@ -23,11 +23,16 @@ const StyledNoteBody = styled.div`
   height: calc(100% - 60px);
 `;
 
+interface Tag {
+  id: number;
+  name: string;
+}
+
 interface Note {
   id: string;
   title: string;
   body: string;
-  tags: string[];
+  tags: Tag[];
 }
 
 interface NoteProps {
@@ -50,8 +55,8 @@ function Note({ note }: NoteProps) {
           </span>
           <span>
             {(note.tags || []).map((tag) => (
-              <Fragment key={tag}>
-                <Chip label={tag} size="small" />
+              <Fragment key={tag.id}>
+                <Chip label={tag.name} size="small" />
                 &nbsp;
               </Fragment>
             ))}
