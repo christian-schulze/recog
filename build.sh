@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-docker build -t recog  .
+docker buildx build --progress=plain -t recog  .
