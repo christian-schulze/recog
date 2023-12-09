@@ -1,25 +1,18 @@
 import { vitest } from 'vitest';
-import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import Auth0 from '@auth0/auth0-react';
+import * as Auth0 from '@auth0/auth0-react';
 
 import { PrivateRoute } from './PrivateRoute';
 
-vitest.mock('@auth0/auth0-react', () => {
+vitest.mock('@auth0/auth0-react', async () => {
   return {
-    useAuth0() {
-      return {};
-    },
+    ...await vitest.importActual('@auth0/auth0-react'),
   };
 });
 
 describe('<PrivateRoute>', () => {
   function renderComponent() {
-    return render(
-      <MemoryRouter initialEntries={['/testurl']} initialIndex={0}>
-        <PrivateRoute component={<div>test</div>} path="/testurl" />
-      </MemoryRouter>,
-    );
+    return render(<PrivateRoute element={<div>test</div>} />);
   }
 
   beforeEach(() => {
@@ -33,7 +26,7 @@ describe('<PrivateRoute>', () => {
       const spy = vitest.spyOn(Auth0, 'useAuth0');
       spy.mockImplementation(() => {
         return {
-          loading: false,
+          isLoading: false,
           isAuthenticated: false,
           loginWithRedirect,
         } as unknown as ReturnType<typeof Auth0.useAuth0>;
@@ -57,7 +50,7 @@ describe('<PrivateRoute>', () => {
       const spy = vitest.spyOn(Auth0, 'useAuth0');
       spy.mockImplementation(() => {
         return {
-          loading: true,
+          isLoading: true,
           isAuthenticated: false,
           loginWithRedirect,
         } as unknown as ReturnType<typeof Auth0.useAuth0>;
@@ -79,7 +72,7 @@ describe('<PrivateRoute>', () => {
       const spy = vitest.spyOn(Auth0, 'useAuth0');
       spy.mockImplementation(() => {
         return {
-          loading: false,
+          isLoading: false,
           isAuthenticated: true,
           loginWithRedirect,
         } as unknown as ReturnType<typeof Auth0.useAuth0>;

@@ -40,7 +40,7 @@ describe('<RenameNotebookDialog>', () => {
   });
 
   describe('When clicking cancel button', () => {
-    it('calls onClickCancel', () => {
+    it('calls onClickCancel', async () => {
       const openNotebookId = '1';
       const onClickCancel = vitest.fn();
       const onClickSave = vitest.fn();
@@ -52,7 +52,7 @@ describe('<RenameNotebookDialog>', () => {
         />,
       );
 
-      userEvent.click(screen.getByText('Cancel'));
+      await userEvent.click(screen.getByText('Cancel'));
 
       expect(onClickCancel).toHaveBeenCalled();
     });

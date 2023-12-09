@@ -22,6 +22,10 @@ function PrivateRoute({ element }: PrivateRouteProps) {
     fn();
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return element;
 }
 
