@@ -4,6 +4,8 @@ import MarkdownIt from 'markdown-it';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 
+import type { Note } from './NoteContainer.tsx';
+
 const mdParser = new MarkdownIt({ html: true });
 
 const StyledHeader = styled(Paper)`
@@ -22,18 +24,6 @@ const StyledNoteBody = styled.div`
   overflow-x: scroll;
   height: calc(100% - 60px);
 `;
-
-interface Tag {
-  id: number;
-  name: string;
-}
-
-interface Note {
-  id: string;
-  title: string;
-  body: string;
-  tags: Tag[];
-}
 
 interface NoteProps {
   note: Note;

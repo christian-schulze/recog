@@ -22,12 +22,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
+interface AppToolbarProps {
   editorEnabled: boolean;
   setEditorEnabled: (checked: boolean) => void;
 }
 
-function AppToolbar({ editorEnabled, setEditorEnabled }: Props) {
+function AppToolbar({ editorEnabled, setEditorEnabled }: AppToolbarProps) {
   const { logout, user } = useAuth0();
 
   const classes = useStyles();

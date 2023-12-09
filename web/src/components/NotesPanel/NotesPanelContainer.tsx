@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Fuse from 'fuse.js';
 
+import { gql } from '@/__generated__/gql.ts';
+
 import { notebook, setShouldReFetch } from '@/state/notebook.ts';
+import type { Note } from '@/components/Note/NoteContainer.tsx';
+
 import { NotesPanel } from './NotesPanel';
 
-const GET_NOTEBOOK_QUERY = gql`
+const GET_NOTEBOOK_QUERY = gql(/* GraphQL */ `
   query GetNotebook($notebookId: ID!) {
     getNotebook(id: $notebookId) {
       id
@@ -16,14 +20,15 @@ const GET_NOTEBOOK_QUERY = gql`
         title
         body
         tags {
+          id
           name
         }
       }
     }
   }
-`;
+`);
 
-const ADD_NOTE_MUTATION = gql`
+const ADD_NOTE_MUTATION = gql(/* GraphQL */ `
   mutation AddNote($title: String!, $notebookId: ID!) {
     addNote(title: $title, body: "", tagNames: [], notebookId: $notebookId) {
       id
@@ -31,24 +36,17 @@ const ADD_NOTE_MUTATION = gql`
       body
     }
   }
-`;
+`);
 
-const DELETE_NOTE_MUTATION = gql`
+const DELETE_NOTE_MUTATION = gql(/* GraphQL */ `
   mutation DeleteNote($noteId: ID!) {
     deleteNote(noteId: $noteId)
   }
-`;
+`);
 
 export interface DraftNote {
   title: string;
   notebookId: string;
-}
-
-export interface Note {
-  id: string;
-  title: string;
-  body: string;
-  tags: { name: string }[];
 }
 
 function NotesPanelContainer() {
@@ -60,7 +58,7 @@ function NotesPanelContainer() {
 
   const { data, refetch } = useQuery(GET_NOTEBOOK_QUERY, {
     variables: {
-      notebookId,
+      notebookId: notebookId || '',
     },
   });
 

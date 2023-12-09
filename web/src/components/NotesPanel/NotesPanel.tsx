@@ -13,9 +13,11 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import type { DraftNote } from './NotesPanelContainer.tsx';
+import type { Note } from '@/components/Note/NoteContainer.tsx';
+
 import { QueryStringLink } from '@/components/QueryStringLink';
 import { AddNoteDialog } from '@/components/AddNoteDialog';
-import { DraftNote, Note } from './NotesPanelContainer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface NotesPanel {
+export interface NotesPanelProps {
   notebookId: string;
   noteId: string;
   notes: Note[];
@@ -49,7 +51,7 @@ function NotesPanel({
   deleteNote,
   searchText,
   onChangeSearchText,
-}: NotesPanel) {
+}: NotesPanelProps) {
   const [addNoteDialogOpen, setAddNoteDialogOpen] = useState(false);
   const menuRef = useRef<HTMLElement | null>(null);
   const [menuOpen, setMenuOpen] = useState<string | null>(null);

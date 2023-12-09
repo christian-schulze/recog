@@ -12,7 +12,8 @@ import Input from '@material-ui/core/Input';
 import 'react-markdown-editor-lite/lib/index.css';
 
 import { deleteElement } from '@/utils/array';
-import { Note } from './EditorContainer';
+
+import type { Note } from '@/components/Note/NoteContainer.tsx';
 
 const mdParser = new MarkdownIt({ html: true });
 
@@ -62,7 +63,7 @@ function Editor({
   useEffect(() => {
     setTitle(note.title || '');
     setBody(note.body || '');
-    setTags(note.tags.map((tag) => tag.name) || []);
+    setTags(note.tags?.map((tag) => tag.name) || []);
   }, [note]);
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {

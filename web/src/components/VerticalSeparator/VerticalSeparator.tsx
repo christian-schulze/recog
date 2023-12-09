@@ -10,11 +10,11 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface Props {
+interface VerticalSeparatorProps {
   onMove: DraggableEventHandler;
 }
 
-function VerticalSeparator({ onMove }: Props) {
+function VerticalSeparator({ onMove }: VerticalSeparatorProps) {
   const classes = useStyles();
 
   const handleDrag: DraggableEventHandler = (event, data) => {

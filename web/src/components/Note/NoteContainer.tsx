@@ -1,10 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
-import { Note } from './Note';
+import { gql } from '@/__generated__/gql.ts';
 
-const NOTE_QUERY = gql`
+import { Note as NoteComponent } from './Note.tsx';
+
+export interface Tag {
+  id: string;
+  name: string;
+}
+
+export interface Note {
+  id: string;
+  title: string;
+  body: string;
+  tags?: Tag[];
+}
+
+const NOTE_QUERY = gql(/* GraphQL */ `
   query GetNote($noteId: ID!) {
     getNote(id: $noteId) {
       id
@@ -16,19 +30,19 @@ const NOTE_QUERY = gql`
       }
     }
   }
-`;
+`);
 
 function NoteContainer() {
   const { noteId } = useParams();
+  const [note, setNote] = useState<Note>();
 
-  const { loading, error, data } = useQuery(NOTE_QUERY, {
+  const { data, error, loading } = useQuery(NOTE_QUERY, {
     variables: {
-      noteId,
+      noteId: noteId || '',
     },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
   });
 
-  const [note, setNote] = useState();
   useEffect(() => {
     if (data && !loading && !error) {
       setNote(data.getNote);
@@ -36,7 +50,7 @@ function NoteContainer() {
   }, [data, loading, error]);
 
   if (note) {
-    return <Note note={note} />;
+    return <NoteComponent note={note} />;
   } else {
     return null;
   }

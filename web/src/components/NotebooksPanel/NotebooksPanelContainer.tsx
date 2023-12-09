@@ -1,10 +1,12 @@
-import { gql, useQuery, useMutation } from "@apollo/client";
-import { useParams } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useQuery, useMutation } from '@apollo/client';
+import { useParams } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
-import { NotebooksPanel } from "./NotebooksPanel";
+import { gql } from '@/__generated__/gql.ts';
 
-const GET_NOTEBOOKS_QUERY = gql`
+import { NotebooksPanel } from './NotebooksPanel';
+
+const GET_NOTEBOOKS_QUERY = gql(/* GraphQL */ `
   query GetNotebooks($userId: String!) {
     getNotebooks(userId: $userId) {
       id
@@ -12,9 +14,9 @@ const GET_NOTEBOOKS_QUERY = gql`
       userId
     }
   }
-`;
+`);
 
-const ADD_NOTEBOOK_MUTATION = gql`
+const ADD_NOTEBOOK_MUTATION = gql(/* GraphQL */ `
   mutation AddNotebook($name: String!, $userId: String!) {
     addNotebook(name: $name, userId: $userId) {
       id
@@ -22,19 +24,19 @@ const ADD_NOTEBOOK_MUTATION = gql`
       userId
     }
   }
-`;
+`);
 
-const DELETE_NOTEBOOK_MUTATION = gql`
+const DELETE_NOTEBOOK_MUTATION = gql(/* GraphQL */ `
   mutation DeleteNotebook($notebookId: ID!) {
     deleteNotebook(notebookId: $notebookId)
   }
-`;
+`);
 
-const SAVE_NOTEBOOK_MUTATION = gql`
+const SAVE_NOTEBOOK_MUTATION = gql(/* GraphQL */ `
   mutation SaveNotebook($notebookId: ID!, $name: String!) {
     saveNotebook(notebookId: $notebookId, name: $name)
   }
-`;
+`);
 
 export interface DraftNotebook {
   name: string;
@@ -50,7 +52,7 @@ function NotebooksPanelContainer() {
   const { user } = useAuth0();
 
   const { data, refetch } = useQuery(GET_NOTEBOOKS_QUERY, {
-    variables: { userId: user?.sub },
+    variables: { userId: user?.sub || '' },
   });
   const notebooks = data?.getNotebooks || [];
 
@@ -59,7 +61,9 @@ function NotebooksPanelContainer() {
   const [saveNotebook] = useMutation(SAVE_NOTEBOOK_MUTATION);
 
   const handleAddNotebook = async (notebook: DraftNotebook) => {
-    await addNotebook({ variables: { name: notebook.name, userId: user?.sub } });
+    await addNotebook({
+      variables: { name: notebook.name, userId: user?.sub || '' },
+    });
     await refetch();
   };
 

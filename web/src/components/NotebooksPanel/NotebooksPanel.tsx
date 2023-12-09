@@ -10,10 +10,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import type { DraftNotebook, Notebook } from './NotebooksPanelContainer';
+
 import { QueryStringLink } from '@/components/QueryStringLink';
 import { AddNotebookDialog } from '@/components/AddNotebookDialog';
 import { RenameNotebookDialog } from '@/components/RenameNotebookDialog';
-import { DraftNotebook, Notebook } from './NotebooksPanelContainer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
+interface NotebooksPanelProps {
   notebookId: string;
   notebooks: Notebook[];
   addNotebook: (notebook: DraftNotebook) => void;
@@ -43,7 +44,7 @@ function NotebooksPanel({
   addNotebook,
   deleteNotebook,
   saveNotebook,
-}: Props) {
+}: NotebooksPanelProps) {
   const [addNotebookDialogOpen, setAddNotebookDialogOpen] = useState(false);
   const [renameNotebookDialogOpen, setRenameNotebookDialogOpen] = useState<
     string | null

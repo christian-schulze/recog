@@ -1,62 +1,55 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
+
+import { gql } from '@/__generated__/gql.ts';
 
 import { setShouldReFetch } from '@/state/notebook.ts';
-import { Editor } from './Editor';
 
-const NOTE_QUERY = gql`
+import type { Note } from '@/components/Note/NoteContainer.tsx';
+import { Editor } from './Editor.tsx';
+
+const NOTE_QUERY = gql(/* GraphQL */ `
   query GetNote($noteId: ID!) {
     getNote(id: $noteId) {
       id
       title
       body
       tags {
+        id
         name
       }
     }
   }
-`;
+`);
 
-const ADD_TAG_MUTATION = gql`
+const ADD_TAG_MUTATION = gql(/* GraphQL */ `
   mutation AddTag($notebookId: ID!, $noteId: ID!, $name: String!) {
     addTag(notebookId: $notebookId, noteId: $noteId, name: $name) {
       noteId
       tagId
     }
   }
-`;
+`);
 
-const DELETE_TAG_MUTATION = gql`
+const DELETE_TAG_MUTATION = gql(/* GraphQL */ `
   mutation DeleteTag($notebookId: ID!, $noteId: ID!, $name: String!) {
     deleteTag(notebookId: $notebookId, noteId: $noteId, name: $name)
   }
-`;
+`);
 
-const SAVE_NOTE_MUTATION = gql`
+const SAVE_NOTE_MUTATION = gql(/* GraphQL */ `
   mutation SaveNote($noteId: ID!, $title: String!, $body: String!) {
     saveNote(noteId: $noteId, title: $title, body: $body)
   }
-`;
-
-export interface Tag {
-  id: number;
-  name: string;
-}
-
-export interface Note {
-  id: string;
-  title: string;
-  body: string;
-  tags: Tag[];
-}
+`);
 
 function EditorContainer() {
   const { notebookId, noteId } = useParams();
 
   const { loading, error, data, refetch } = useQuery(NOTE_QUERY, {
     variables: {
-      noteId,
+      noteId: noteId || '',
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -75,17 +68,21 @@ function EditorContainer() {
   }, [data, loading, error]);
 
   const handleAddTag = async (name: string) => {
-    await addTag({ variables: { notebookId, noteId, name } });
+    await addTag({
+      variables: { notebookId: notebookId || '', noteId: noteId || '', name },
+    });
     return true;
   };
 
   const handleDeleteTag = async (name: string) => {
-    await deleteTag({ variables: { notebookId, noteId, name } });
+    await deleteTag({
+      variables: { notebookId: notebookId || '', noteId: noteId || '', name },
+    });
     return true;
   };
 
   const handleSaveNote = async (title: string, body: string) => {
-    await saveNote({ variables: { noteId, title, body } });
+    await saveNote({ variables: { noteId: noteId || '', title, body } });
     setShouldReFetch(true);
   };
 
