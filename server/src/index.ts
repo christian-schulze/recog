@@ -2,20 +2,14 @@ import express from 'express';
 import http from 'http';
 import { AddressInfo } from 'net';
 import cors from 'cors';
-import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 
-import { schema } from './graphql/schema';
-import { db } from './dbSqlite';
+import { bootstrapApolloServer } from './graphql/server.ts';
+import { type Context ,db } from './data';
 
 const app = express();
 
-const apolloServer = new ApolloServer({
-  schema,
-  status400ForVariableCoercionErrors: true,
-});
-
-await apolloServer.start();
+const apolloServer = await bootstrapApolloServer<Context>();
 
 app.use(
   '/graphql',

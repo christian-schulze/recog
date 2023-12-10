@@ -187,3 +187,7 @@ export const db = {
     return true;
   },
 };
+
+export interface Context {
+  db: typeof db;
+}
