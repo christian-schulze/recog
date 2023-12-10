@@ -9,7 +9,7 @@ import { type Context, db } from './data';
 
 const app = express();
 
-const apolloServer = await bootstrapApolloServer<Context>();
+const apolloServer = await bootstrapApolloServer<Context>('generated');
 
 app.use(
   '/graphql',
