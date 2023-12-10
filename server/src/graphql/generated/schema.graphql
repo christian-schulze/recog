@@ -1,0 +1,48 @@
+type Notebook {
+  id: ID!
+  name: String!
+  notes: [Note!]!
+  userId: String!
+}
+
+type Note {
+  id: ID!
+  title: String!
+  body: String!
+  tags: [Tag!]!
+  notebook: Notebook!
+}
+
+type Tag {
+  id: ID!
+  name: String!
+  notebook: Notebook!
+}
+
+type NotesTags {
+  noteId: ID!
+  tagId: ID!
+}
+
+type Query {
+  getNotebook(id: ID!): Notebook!
+  getNotebooks(userId: String!): [Notebook!]!
+  getNote(id: ID!): Note!
+  getNotes: [Note!]!
+}
+
+type Mutation {
+  addNotebook(name: String!, userId: String!): Notebook!
+  saveNotebook(name: String!, notebookId: ID!): Boolean!
+  deleteNotebook(notebookId: ID!): Boolean!
+  addNote(
+    body: String!
+    notebookId: ID!
+    tagNames: [String!]!
+    title: String!
+  ): Note!
+  saveNote(body: String!, noteId: ID!, title: String!): Boolean!
+  deleteNote(noteId: ID!): Boolean!
+  addTag(name: String!, notebookId: ID!, noteId: ID!): NotesTags!
+  deleteTag(name: String!, notebookId: ID!, noteId: ID!): Boolean!
+}

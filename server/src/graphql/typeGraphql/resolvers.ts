@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import {
   Arg,
+  buildSchema,
   Ctx,
   Field,
   FieldResolver,
@@ -12,7 +13,7 @@ import {
   Root,
 } from 'type-graphql';
 
-import { type Context } from '../data';
+import { type Context } from '../../data';
 
 @ObjectType()
 class Notebook {
@@ -200,3 +201,10 @@ export class NoteResolver {
     return notebook?.dataValues;
   }
 }
+
+export const buildGraphqlSchema = async (outputPath: string) => {
+  return await buildSchema({
+    resolvers: [NotebookResolver, NoteResolver, Resolvers],
+    emitSchemaFile: outputPath,
+  });
+};
