@@ -1,1 +1,1 @@
-export * from "./VerticalSeparator";
+export * from './VerticalSeparator';

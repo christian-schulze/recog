@@ -1,2 +1,2 @@
-export * from "./NotebooksPanel";
-export * from "./NotebooksPanelContainer";
+export * from './NotebooksPanel';
+export * from './NotebooksPanelContainer';

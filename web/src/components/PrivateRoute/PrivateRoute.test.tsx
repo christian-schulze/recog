@@ -6,7 +6,7 @@ import { PrivateRoute } from './PrivateRoute';
 
 vitest.mock('@auth0/auth0-react', async () => {
   return {
-    ...await vitest.importActual('@auth0/auth0-react'),
+    ...(await vitest.importActual('@auth0/auth0-react')),
   };
 });
 

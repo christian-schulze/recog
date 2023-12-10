@@ -5,7 +5,7 @@ import cors from 'cors';
 import { expressMiddleware } from '@apollo/server/express4';
 
 import { bootstrapApolloServer } from './graphql/server.ts';
-import { type Context ,db } from './data';
+import { type Context, db } from './data';
 
 const app = express();
 

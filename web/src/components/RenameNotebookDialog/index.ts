@@ -1,1 +1,1 @@
-export * from "./RenameNotebookDialog";
+export * from './RenameNotebookDialog';

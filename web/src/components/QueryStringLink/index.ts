@@ -1,1 +1,1 @@
-export * from "./QueryStringLink";
+export * from './QueryStringLink';

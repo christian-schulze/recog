@@ -1,10 +1,10 @@
-import { ChangeEvent, useState } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { ChangeEvent, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 interface DraftNotebook {
   id: string;
@@ -22,11 +22,9 @@ const RenameNotebookDialog = ({
   onClickCancel,
   onClickSave,
 }: RenameNotebookDialogProps) => {
-  const [notebookName, setNotebookName] = useState("");
+  const [notebookName, setNotebookName] = useState('');
 
-  const handleChangeNotebookName = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeNotebookName = (event: ChangeEvent<HTMLInputElement>) => {
     setNotebookName(event.target.value);
   };
 
