@@ -4,7 +4,7 @@ import MarkdownIt from 'markdown-it';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 
-import type { Note } from './NoteContainer.tsx';
+import type { Note } from '@/types';
 
 const mdParser = new MarkdownIt({ html: true });
 
@@ -25,7 +25,7 @@ const StyledNoteBody = styled.div`
   height: calc(100% - 60px);
 `;
 
-interface NoteProps {
+export interface NoteProps {
   note: Note;
 }
 

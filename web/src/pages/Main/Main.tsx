@@ -9,7 +9,7 @@ import { EditorContainer } from '@/components/Editor';
 import { NotebooksPanelContainer } from '@/components/NotebooksPanel';
 import { NotesPanelContainer } from '@/components/NotesPanel';
 import { VerticalSeparator } from '@/components/VerticalSeparator';
-import { NoteContainer } from '@/components/Note/NoteContainer';
+import { NoteContainer } from '@/components/Note/NoteContainer.tsx';
 
 const useStyles = makeStyles((_theme) => ({
   root: {

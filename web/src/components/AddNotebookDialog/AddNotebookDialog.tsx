@@ -7,11 +7,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-interface DraftNotebook {
-  name: string;
-}
+import type { DraftNotebook } from '@/types';
 
-interface AddNotebookDialogProps {
+export interface AddNotebookDialogProps {
   open: boolean;
   onClickCancel: () => void;
   onClickAdd: (notebook: DraftNotebook) => void;

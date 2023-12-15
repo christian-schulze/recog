@@ -1,47 +1,53 @@
-import { type Resolvers } from './graphql.ts';
-import { Context } from '../../data';
+import { GraphQLError } from 'graphql/error';
+
+import { type Resolvers } from './__generated__/graphql.ts';
+import { type Context } from '../../data';
 
 export const resolvers: Resolvers<Context> = {
   Query: {
     getNotebook: async (_parent, { id }, context) => {
-      const notebook = await context.db.getNotebook(parseInt(id));
-      return notebook?.dataValues;
+      const notebook = await context.db.getNotebook(id);
+      if (!notebook) {
+        throw new GraphQLError(`Notebook with id "${id}" not found`, {
+          extensions: {
+            code: 'NOTBOOK_NOT_FOUND',
+          },
+        });
+      }
+      return notebook;
     },
     getNotebooks: async (_parent, { userId }, context) => {
-      const notebooks = await context.db.getAllNotebooks(userId);
-      return notebooks?.map((notebook) => notebook.dataValues);
+      return await context.db.getAllNotebooks(userId);
     },
 
     getNote: async (_parent, { id }, context) => {
-      const note = await context.db.getNote(parseInt(id));
-      if (note) {
-        return {
-          ...note?.dataValues,
-          tags: note.tags?.map((tag) => tag.dataValues),
-        };
+      const note = await context.db.getNote(id);
+      if (!note) {
+        throw new GraphQLError(`Note with id "${id}" not found`, {
+          extensions: {
+            code: 'NOTE_NOT_FOUND',
+          },
+        });
       }
+      return note;
     },
     getNotes: async (_parent, _args, context) => {
+      console.log('getNotes(): BEGIN');
       const notes = await context.db.getAllNotes();
-      return notes.map((note) => {
-        return {
-          ...note.dataValues,
-          tags: note.tags?.map((tag) => tag.dataValues),
-        };
-      });
+      console.log('getNotes', notes);
+      return notes;
     },
   },
 
   Mutation: {
     addNotebook: async (_parent, { name, userId }, context) => {
-      const notebook = await context.db.addNotebook(name, userId);
-      return notebook.dataValues;
+      return await context.db.addNotebook(name, userId);
     },
     saveNotebook: async (_parent, { notebookId, name }, context) => {
-      return await context.db.saveNotebook(parseInt(notebookId), name);
+      return await context.db.saveNotebook(notebookId, name);
     },
     deleteNotebook: async (_parent, { notebookId }, context) => {
-      return await context.db.deleteNotebook(parseInt(notebookId));
+      return await context.db.deleteNotebook(notebookId);
     },
 
     addNote: async (
@@ -49,59 +55,61 @@ export const resolvers: Resolvers<Context> = {
       { title, body, tagNames, notebookId },
       context,
     ) => {
-      const note = await context.db.addNote(
-        title,
-        body,
-        tagNames,
-        parseInt(notebookId),
-      );
-      return note.dataValues;
+      return await context.db.addNote(title, body, tagNames, notebookId);
     },
     saveNote: async (_parent, { noteId, title, body }, context) => {
-      return await context.db.saveNote(parseInt(noteId), title, body);
+      return await context.db.saveNote(noteId, title, body);
     },
     deleteNote: async (_parent, { noteId }, context) => {
-      return await context.db.deleteNote(parseInt(noteId));
+      return await context.db.deleteNote(noteId);
     },
 
     addTag: async (_parent, { notebookId, noteId, name }, context) => {
-      const notesTags = await context.db.addTag(
-        parseInt(notebookId),
-        parseInt(noteId),
-        name,
-      );
+      const notesTags = await context.db.addTag(notebookId, noteId, name);
       return {
-        noteId: notesTags.noteId.toString(),
-        tagId: notesTags.tagId.toString(),
+        noteId: notesTags.noteId,
+        tagId: notesTags.tagId,
       };
     },
     deleteTag: async (_parent, { notebookId, noteId, name }, context) => {
-      return await context.db.deleteTag(
-        parseInt(notebookId),
-        parseInt(noteId),
-        name,
-      );
+      return await context.db.deleteTag(notebookId, noteId, name);
     },
   },
 
   Notebook: {
     notes: async (parent, _args, context) => {
-      const notes = await context.db.getNotesForNotebook(parseInt(parent.id));
-      return notes.map((note) => {
-        return {
-          ...note.dataValues,
-          tags: note.tags?.map((tag) => tag.dataValues),
-        };
-      });
+      if (!parent.id) {
+        throw new GraphQLError(`Parent Notebook has no id set`, {
+          extensions: {
+            code: 'ID_NOT_SET',
+          },
+        });
+      }
+      return await context.db.getNotesForNotebook(parent.id);
     },
   },
 
   Note: {
     notebook: async (parent, _args, context) => {
-      const notebook = await context.db.getNotebook(
-        parseInt(parent.notebook.id),
-      );
-      return notebook?.dataValues;
+      if (!parent.notebook?.id) {
+        throw new GraphQLError(`Parent Note has notebookId set`, {
+          extensions: {
+            code: 'ID_NOT_SET',
+          },
+        });
+      }
+      const notebook = await context.db.getNotebook(parent.notebook.id);
+      if (!notebook) {
+        throw new GraphQLError(
+          `Notebook with id "${parent.notebook?.id}" not found`,
+          {
+            extensions: {
+              code: 'NOTBOOK_NOT_FOUND',
+            },
+          },
+        );
+      }
+      return notebook;
     },
   },
 };

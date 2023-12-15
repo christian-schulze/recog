@@ -11,9 +11,9 @@ import Input from '@material-ui/core/Input';
 
 import 'react-markdown-editor-lite/lib/index.css';
 
-import { deleteElement } from '@/utils/array';
+import type { Note } from '@/types';
 
-import type { Note } from '@/components/Note/NoteContainer.tsx';
+import { deleteElement } from '@/utils/array';
 
 const mdParser = new MarkdownIt({ html: true });
 
@@ -38,7 +38,7 @@ const ButtonSpacer = styled.span`
   width: 4px;
 `;
 
-interface EditorProps {
+export interface EditorProps {
   note: Note;
   onDeleteTag: (tagToDelete: string) => Promise<boolean>;
   onAddTag: (newTag: string) => Promise<boolean>;

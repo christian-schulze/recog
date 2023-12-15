@@ -2,7 +2,7 @@ import { vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import * as Auth0 from '@auth0/auth0-react';
 
-import { PrivateRoute } from './PrivateRoute';
+import { PrivateRoute } from './PrivateRoute.tsx';
 
 vitest.mock('@auth0/auth0-react', async () => {
   return {

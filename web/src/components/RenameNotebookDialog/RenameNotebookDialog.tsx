@@ -6,15 +6,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-interface DraftNotebook {
-  id: string;
-  name: string;
-}
+import type { Notebook } from '@/types';
 
-interface RenameNotebookDialogProps {
-  openNotebookId: string | null;
+export interface RenameNotebookDialogProps {
+  openNotebookId: number | null;
   onClickCancel: () => void;
-  onClickSave: (notebook: DraftNotebook) => void;
+  onClickSave: (notebook: Notebook) => void;
 }
 
 const RenameNotebookDialog = ({

@@ -24,7 +24,7 @@ describe('<RenameNotebookDialog>', () => {
 
   describe('When open is true', () => {
     it('renders the dialog', () => {
-      const openNotebookId = '1';
+      const openNotebookId = 1;
       const onClickCancel = vitest.fn();
       const onClickSave = vitest.fn();
       render(
@@ -41,7 +41,7 @@ describe('<RenameNotebookDialog>', () => {
 
   describe('When clicking cancel button', () => {
     it('calls onClickCancel', async () => {
-      const openNotebookId = '1';
+      const openNotebookId = 1;
       const onClickCancel = vitest.fn();
       const onClickSave = vitest.fn();
       render(
@@ -60,7 +60,7 @@ describe('<RenameNotebookDialog>', () => {
 
   describe('When clicking add button', () => {
     it('calls onClickAdd', async () => {
-      const openNotebookId = '1';
+      const openNotebookId = 1;
       const onClickCancel = vitest.fn();
       const onClickSave = vitest.fn();
       render(

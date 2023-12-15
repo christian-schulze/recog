@@ -1,6 +1,8 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+
+import type { DraftNotebook, Notebook } from '@/types';
 
 import { gql } from '@/__generated__/gql.ts';
 
@@ -38,15 +40,6 @@ const SAVE_NOTEBOOK_MUTATION = gql(/* GraphQL */ `
   }
 `);
 
-export interface DraftNotebook {
-  name: string;
-}
-
-export interface Notebook {
-  id: string;
-  name: string;
-}
-
 function NotebooksPanelContainer() {
   const { notebookId } = useParams();
   const { user } = useAuth0();
@@ -67,14 +60,14 @@ function NotebooksPanelContainer() {
     await refetch();
   };
 
-  const handleDeleteNotebook = async (notebookId: string) => {
+  const handleDeleteNotebook = async (notebookId: number) => {
     await deleteNotebook({ variables: { notebookId } });
     await refetch();
   };
 
   const handleSaveNotebook = async (notebook: Notebook) => {
     await saveNotebook({
-      variables: { notebookId: notebook.id, name: notebook.name },
+      variables: { notebookId: notebook.id!, name: notebook.name },
     });
     await refetch();
   };
@@ -82,7 +75,7 @@ function NotebooksPanelContainer() {
   if (notebooks) {
     return (
       <NotebooksPanel
-        notebookId={notebookId!}
+        notebookId={parseInt(notebookId || '', 10)}
         notebooks={notebooks}
         addNotebook={handleAddNotebook}
         deleteNotebook={handleDeleteNotebook}

@@ -1,22 +1,22 @@
 type Notebook {
-  id: ID!
+  id: ID
   name: String!
-  notes: [Note!]!
+  notes: [Note!]
   userId: String!
 }
 
 type Note {
-  id: ID!
+  id: ID
   title: String!
   body: String!
-  tags: [Tag!]!
-  notebook: Notebook!
+  tags: [Tag!]
+  notebook: Notebook
 }
 
 type Tag {
-  id: ID!
+  id: ID
   name: String!
-  notebook: Notebook!
+  notebook: Notebook
 }
 
 type NotesTags {

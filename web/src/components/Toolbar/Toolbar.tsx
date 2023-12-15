@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface AppToolbarProps {
+export interface AppToolbarProps {
   editorEnabled: boolean;
   setEditorEnabled: (checked: boolean) => void;
 }

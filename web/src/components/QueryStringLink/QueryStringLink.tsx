@@ -13,7 +13,7 @@ const StyledLink = styled(Link)`
   }
 `;
 
-interface QueryStringLinkProps {
+export interface QueryStringLinkProps {
   to: string;
   children: ReactNode;
 }

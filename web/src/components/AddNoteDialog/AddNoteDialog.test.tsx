@@ -10,7 +10,7 @@ describe('<AddNoteDialog>', () => {
       const open = false;
       const onClickCancel = vitest.fn();
       const onClickAdd = vitest.fn();
-      const notebookId = '1';
+      const notebookId = 1;
       render(
         <AddNoteDialog
           open={open}
@@ -29,7 +29,7 @@ describe('<AddNoteDialog>', () => {
       const open = true;
       const onClickCancel = vitest.fn();
       const onClickAdd = vitest.fn();
-      const notebookId = '1';
+      const notebookId = 1;
       render(
         <AddNoteDialog
           open={open}
@@ -48,7 +48,7 @@ describe('<AddNoteDialog>', () => {
       const open = true;
       const onClickCancel = vitest.fn();
       const onClickAdd = vitest.fn();
-      const notebookId = '1';
+      const notebookId = 1;
       render(
         <AddNoteDialog
           open={open}
@@ -69,7 +69,7 @@ describe('<AddNoteDialog>', () => {
       const open = true;
       const onClickCancel = vitest.fn();
       const onClickAdd = vitest.fn();
-      const notebookId = '1';
+      const notebookId = 1;
       render(
         <AddNoteDialog
           open={open}

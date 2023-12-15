@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-interface PrivateRouteProps {
+export interface PrivateRouteProps {
   element: ReactNode;
 }
 

@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 
+import type { Note } from '@/types';
+
 import { gql } from '@/__generated__/gql.ts';
 
 import { setShouldReFetch } from '@/state/notebook.ts';
 
-import type { Note } from '@/components/Note/NoteContainer.tsx';
 import { Editor } from './Editor.tsx';
 
 const NOTE_QUERY = gql(/* GraphQL */ `
@@ -49,7 +50,7 @@ function EditorContainer() {
 
   const { loading, error, data, refetch } = useQuery(NOTE_QUERY, {
     variables: {
-      noteId: noteId || '',
+      noteId: parseInt(noteId || '', 10),
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -69,20 +70,30 @@ function EditorContainer() {
 
   const handleAddTag = async (name: string) => {
     await addTag({
-      variables: { notebookId: notebookId || '', noteId: noteId || '', name },
+      variables: {
+        notebookId: parseInt(notebookId || ''),
+        noteId: parseInt(noteId || '', 10),
+        name,
+      },
     });
     return true;
   };
 
   const handleDeleteTag = async (name: string) => {
     await deleteTag({
-      variables: { notebookId: notebookId || '', noteId: noteId || '', name },
+      variables: {
+        notebookId: parseInt(notebookId || '', 10),
+        noteId: parseInt(noteId || '', 10),
+        name,
+      },
     });
     return true;
   };
 
   const handleSaveNote = async (title: string, body: string) => {
-    await saveNote({ variables: { noteId: noteId || '', title, body } });
+    await saveNote({
+      variables: { noteId: parseInt(noteId || '', 10), title, body },
+    });
     setShouldReFetch(true);
   };
 
@@ -91,7 +102,7 @@ function EditorContainer() {
     if (refetchedData) {
       setNote({
         ...refetchedData.getNote,
-        tags: [...refetchedData.getNote.tags],
+        tags: [...(refetchedData.getNote.tags || [])],
       });
     }
   };

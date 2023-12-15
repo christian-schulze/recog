@@ -2,21 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
+import { type Note } from '@/types';
+
 import { gql } from '@/__generated__/gql.ts';
 
 import { Note as NoteComponent } from './Note.tsx';
-
-export interface Tag {
-  id: string;
-  name: string;
-}
-
-export interface Note {
-  id: string;
-  title: string;
-  body: string;
-  tags?: Tag[];
-}
 
 const NOTE_QUERY = gql(/* GraphQL */ `
   query GetNote($noteId: ID!) {
@@ -38,7 +28,7 @@ function NoteContainer() {
 
   const { data, error, loading } = useQuery(NOTE_QUERY, {
     variables: {
-      noteId: noteId || '',
+      noteId: parseInt(noteId || '', 10),
     },
     fetchPolicy: 'network-only',
   });

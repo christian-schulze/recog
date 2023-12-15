@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import type { DraftNotebook, Notebook } from './NotebooksPanelContainer';
+import type { DraftNotebook, Notebook } from '@/types';
 
 import { QueryStringLink } from '@/components/QueryStringLink';
 import { AddNotebookDialog } from '@/components/AddNotebookDialog';
@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface NotebooksPanelProps {
-  notebookId: string;
+export interface NotebooksPanelProps {
+  notebookId: number;
   notebooks: Notebook[];
   addNotebook: (notebook: DraftNotebook) => void;
-  deleteNotebook: (notebookId: string) => void;
+  deleteNotebook: (notebookId: number) => void;
   saveNotebook: (notebook: Notebook) => void;
 }
 
@@ -47,10 +47,10 @@ function NotebooksPanel({
 }: NotebooksPanelProps) {
   const [addNotebookDialogOpen, setAddNotebookDialogOpen] = useState(false);
   const [renameNotebookDialogOpen, setRenameNotebookDialogOpen] = useState<
-    string | null
+    number | null
   >(null);
   const menuRef = useRef<HTMLElement | null>(null);
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState<number | null>(null);
 
   const classes = useStyles();
 
@@ -78,7 +78,7 @@ function NotebooksPanel({
 
   const handleClickNotebookMenu = (
     event: MouseEvent<HTMLElement>,
-    notebookId: string,
+    notebookId: number,
   ) => {
     event.preventDefault();
     menuRef.current = event.target as HTMLElement;
@@ -129,7 +129,7 @@ function NotebooksPanel({
                 <ListItemText primary={notebook.name} />
                 <IconButton
                   onClick={(event) =>
-                    handleClickNotebookMenu(event, notebook.id)
+                    handleClickNotebookMenu(event, notebook.id!)
                   }
                   size="small"
                 >

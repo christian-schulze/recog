@@ -13,8 +13,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import type { DraftNote } from './NotesPanelContainer.tsx';
-import type { Note } from '@/components/Note/NoteContainer.tsx';
+import type { DraftNote, Note } from '@/types';
 
 import { QueryStringLink } from '@/components/QueryStringLink';
 import { AddNoteDialog } from '@/components/AddNoteDialog';
@@ -34,11 +33,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface NotesPanelProps {
-  notebookId: string;
-  noteId: string;
+  notebookId: number;
+  noteId: number;
   notes: Note[];
   addNote: (note: DraftNote) => void;
-  deleteNote: (noteId: string) => void;
+  deleteNote: (noteId: number) => void;
   searchText: string;
   onChangeSearchText: (text: string) => void;
 }
@@ -54,7 +53,7 @@ function NotesPanel({
 }: NotesPanelProps) {
   const [addNoteDialogOpen, setAddNoteDialogOpen] = useState(false);
   const menuRef = useRef<HTMLElement | null>(null);
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState<number | null>(null);
 
   const classes = useStyles();
 
@@ -77,7 +76,7 @@ function NotesPanel({
 
   const handleClickListItemMenu = (
     event: MouseEvent<HTMLElement>,
-    noteId: string,
+    noteId: number,
   ) => {
     event.preventDefault();
     menuRef.current = event.target as HTMLElement;
@@ -142,7 +141,7 @@ function NotesPanel({
               <ListItem button selected={noteId === note.id}>
                 <ListItemText primary={note.title} />
                 <IconButton
-                  onClick={(event) => handleClickListItemMenu(event, note.id)}
+                  onClick={(event) => handleClickListItemMenu(event, note.id!)}
                   size="small"
                 >
                   <MoreVertIcon />

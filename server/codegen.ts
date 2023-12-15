@@ -3,7 +3,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   schema: './src/graphql/generated/schema.graphql',
   generates: {
-    './src/graphql/generated': {
+    './src/graphql/generated/__generated__': {
       preset: 'graphql-modules',
       presetConfig: {
         baseTypesPath: './graphql.ts',
@@ -18,7 +18,13 @@ const config: CodegenConfig = {
         'typescript',
         'typescript-resolvers',
       ],
+      config: {
+        scalars: {
+          ID: 'number',
+        },
+      },
     },
   },
 };
+
 export default config;

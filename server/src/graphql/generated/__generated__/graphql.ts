@@ -25,7 +25,7 @@ export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
 };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
+  ID: { input: number; output: number };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -90,17 +90,17 @@ export type MutationSaveNotebookArgs = {
 export type Note = {
   __typename?: 'Note';
   body: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  notebook: Notebook;
-  tags: Array<Tag>;
+  id?: Maybe<Scalars['ID']['output']>;
+  notebook?: Maybe<Notebook>;
+  tags?: Maybe<Array<Tag>>;
   title: Scalars['String']['output'];
 };
 
 export type Notebook = {
   __typename?: 'Notebook';
-  id: Scalars['ID']['output'];
+  id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
-  notes: Array<Note>;
+  notes?: Maybe<Array<Note>>;
   userId: Scalars['String']['output'];
 };
 
@@ -132,9 +132,9 @@ export type QueryGetNotebooksArgs = {
 
 export type Tag = {
   __typename?: 'Tag';
-  id: Scalars['ID']['output'];
+  id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
-  notebook: Notebook;
+  notebook?: Maybe<Notebook>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -332,9 +332,13 @@ export type NoteResolvers<
     ResolversParentTypes['Note'] = ResolversParentTypes['Note'],
 > = {
   body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  notebook?: Resolver<ResolversTypes['Notebook'], ParentType, ContextType>;
-  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  notebook?: Resolver<
+    Maybe<ResolversTypes['Notebook']>,
+    ParentType,
+    ContextType
+  >;
+  tags?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -344,9 +348,13 @@ export type NotebookResolvers<
   ParentType extends
     ResolversParentTypes['Notebook'] = ResolversParentTypes['Notebook'],
 > = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  notes?: Resolver<Array<ResolversTypes['Note']>, ParentType, ContextType>;
+  notes?: Resolver<
+    Maybe<Array<ResolversTypes['Note']>>,
+    ParentType,
+    ContextType
+  >;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -391,9 +399,13 @@ export type TagResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag'],
 > = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  notebook?: Resolver<ResolversTypes['Notebook'], ParentType, ContextType>;
+  notebook?: Resolver<
+    Maybe<ResolversTypes['Notebook']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

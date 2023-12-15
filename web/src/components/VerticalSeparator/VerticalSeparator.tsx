@@ -10,7 +10,7 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface VerticalSeparatorProps {
+export interface VerticalSeparatorProps {
   onMove: DraggableEventHandler;
 }
 

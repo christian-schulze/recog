@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import Fuse from 'fuse.js';
 
+import type { DraftNote, Note } from '@/types';
+
 import { gql } from '@/__generated__/gql.ts';
 
 import { notebook, setShouldReFetch } from '@/state/notebook.ts';
-import type { Note } from '@/components/Note/NoteContainer.tsx';
 
-import { NotesPanel } from './NotesPanel';
+import { NotesPanel } from './NotesPanel.tsx';
 
 const GET_NOTEBOOK_QUERY = gql(/* GraphQL */ `
   query GetNotebook($notebookId: ID!) {
@@ -44,11 +45,6 @@ const DELETE_NOTE_MUTATION = gql(/* GraphQL */ `
   }
 `);
 
-export interface DraftNote {
-  title: string;
-  notebookId: string;
-}
-
 function NotesPanelContainer() {
   const { notebookId, noteId } = useParams();
 
@@ -58,7 +54,7 @@ function NotesPanelContainer() {
 
   const { data, refetch } = useQuery(GET_NOTEBOOK_QUERY, {
     variables: {
-      notebookId: notebookId || '',
+      notebookId: parseInt(notebookId || '', 10),
     },
   });
 
@@ -102,7 +98,7 @@ function NotesPanelContainer() {
     refetch();
   };
 
-  const handleDeleteNote = async (noteId: string) => {
+  const handleDeleteNote = async (noteId: number) => {
     await deleteNote({ variables: { noteId } });
     refetch();
   };
@@ -110,8 +106,8 @@ function NotesPanelContainer() {
   if (filteredNotes) {
     return (
       <NotesPanel
-        notebookId={notebookId!}
-        noteId={noteId!}
+        notebookId={parseInt(notebookId || '', 10)}
+        noteId={parseInt(noteId || '', 10)}
         notes={filteredNotes}
         addNote={handleAddNote}
         deleteNote={handleDeleteNote}

@@ -22,7 +22,7 @@ export type Incremental<T> =
     };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
+  ID: { input: number; output: number };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -87,17 +87,17 @@ export type MutationSaveNotebookArgs = {
 export type Note = {
   __typename?: 'Note';
   body: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  notebook: Notebook;
-  tags: Array<Tag>;
+  id?: Maybe<Scalars['ID']['output']>;
+  notebook?: Maybe<Notebook>;
+  tags?: Maybe<Array<Tag>>;
   title: Scalars['String']['output'];
 };
 
 export type Notebook = {
   __typename?: 'Notebook';
-  id: Scalars['ID']['output'];
+  id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
-  notes: Array<Note>;
+  notes?: Maybe<Array<Note>>;
   userId: Scalars['String']['output'];
 };
 
@@ -129,9 +129,9 @@ export type QueryGetNotebooksArgs = {
 
 export type Tag = {
   __typename?: 'Tag';
-  id: Scalars['ID']['output'];
+  id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
-  notebook: Notebook;
+  notebook?: Maybe<Notebook>;
 };
 
 export type GetNoteQueryVariables = Exact<{
@@ -142,10 +142,14 @@ export type GetNoteQuery = {
   __typename?: 'Query';
   getNote: {
     __typename?: 'Note';
-    id: string;
+    id?: number | null;
     title: string;
     body: string;
-    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    tags?: Array<{
+      __typename?: 'Tag';
+      id?: number | null;
+      name: string;
+    }> | null;
   };
 };
 
@@ -157,7 +161,7 @@ export type AddTagMutationVariables = Exact<{
 
 export type AddTagMutation = {
   __typename?: 'Mutation';
-  addTag: { __typename?: 'NotesTags'; noteId: string; tagId: string };
+  addTag: { __typename?: 'NotesTags'; noteId: number; tagId: number };
 };
 
 export type DeleteTagMutationVariables = Exact<{
@@ -184,7 +188,7 @@ export type GetNotebooksQuery = {
   __typename?: 'Query';
   getNotebooks: Array<{
     __typename?: 'Notebook';
-    id: string;
+    id?: number | null;
     name: string;
     userId: string;
   }>;
@@ -199,7 +203,7 @@ export type AddNotebookMutation = {
   __typename?: 'Mutation';
   addNotebook: {
     __typename?: 'Notebook';
-    id: string;
+    id?: number | null;
     name: string;
     userId: string;
   };
@@ -232,15 +236,19 @@ export type GetNotebookQuery = {
   __typename?: 'Query';
   getNotebook: {
     __typename?: 'Notebook';
-    id: string;
+    id?: number | null;
     name: string;
-    notes: Array<{
+    notes?: Array<{
       __typename?: 'Note';
-      id: string;
+      id?: number | null;
       title: string;
       body: string;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-    }>;
+      tags?: Array<{
+        __typename?: 'Tag';
+        id?: number | null;
+        name: string;
+      }> | null;
+    }> | null;
   };
 };
 
@@ -251,7 +259,12 @@ export type AddNoteMutationVariables = Exact<{
 
 export type AddNoteMutation = {
   __typename?: 'Mutation';
-  addNote: { __typename?: 'Note'; id: string; title: string; body: string };
+  addNote: {
+    __typename?: 'Note';
+    id?: number | null;
+    title: string;
+    body: string;
+  };
 };
 
 export type DeleteNoteMutationVariables = Exact<{
